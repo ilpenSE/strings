@@ -2,10 +2,10 @@
 #include "prettyp.h"
 
 int main() {
-  string s1 = str_new("naber");
-  string s2 = str_new("NABER");
-  string s3 = str_new("NABeR1");
-  string s4 = str_new("14 NABeR1");
+  String s1 = str_new("naber");
+  String s2 = str_new("NABER");
+  String s3 = str_new("NABeR1");
+  String s4 = str_new("14 NABeR1");
 
   str_toupper(&s1);
   str_tolower(&s2);

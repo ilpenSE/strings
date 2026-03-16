@@ -2,7 +2,7 @@
 #include "prettyp.h"
 
 int main() {
-  string s = str_new("kanka");
+  String s = str_new("kanka");
   print_str(&s);
 
   str_append(&s, '!');
@@ -12,7 +12,7 @@ int main() {
   str_cat(&s, "hello ");
   print_str(&s); // expected: "kanka! hello "
 
-  string c = str_new("world");
+  String c = str_new("world");
   str_cat_str(&s, &c);
   print_str(&s); // expected: "kanka! hello world"
   print_str(&c); // expected: "world"
@@ -20,12 +20,12 @@ int main() {
   str_cat(&s, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
   print_str(&s);
 
-  string a = str_new("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+  String a = str_new("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
   str_cat_str(&s, &a);
   print_str(&s);
   print_str(&a);
 
-  string b = str_new("ab");
+  String b = str_new("ab");
   str_repeat(&b, 15);
   print_str(&b);
   

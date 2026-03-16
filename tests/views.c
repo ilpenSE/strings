@@ -2,16 +2,20 @@
 #include "prettyp.h"
 
 int main() {
-  string s = str_new("Hello, World!");
-  string_view sv1 = sv_from_str(&s); // Hello, World!
-  string_view sv2 = sv_from_str_o(&s, 4); // o, World!
-  string_view sv3 = sv_from_str_o(&s, 50); // empty
-  string_view sv4 = sv_from_str_o(&s, 0); // Hello, World!
-  
+  String s = str_new("Hello, World!");
+  StringView sv1 = sv_from_str(&s, 0, s.len); // Hello, World!
+  StringView sv2 = sv_from_str(&s, 0, 4); // Hell
+  StringView sv3 = sv_from_str(&s, 0, 50); // empty
+  StringView sv4 = sv_from_str(&s, 7, s.len); // World!
+
+  const char* some_str = "Çağatay Akman";
+  StringView sv5 = sv_from_cstr(some_str, strlen(some_str), 0, 5); // Çağ
+
   print_sv(&sv1);
   print_sv(&sv2);
   print_sv(&sv3);
   print_sv(&sv4);
+  print_sv(&sv5);
 
   str_free(&s);
   return 0;

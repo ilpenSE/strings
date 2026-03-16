@@ -3,10 +3,10 @@
 
 int main() {
   // TRIM
-  string s1 = str_new("\t\n  hello!");
-  string s2 = str_new(" hello! \r\t\n");
-  string s3 = str_new("hello! \n");
-  string s4 = str_new("");
+  String s1 = str_new("\t\n  hello!");
+  String s2 = str_new(" hello! \r\t\n");
+  String s3 = str_new("hello! \n");
+  String s4 = str_new("");
 
   str_trim(&s1);
   str_trim(&s2);

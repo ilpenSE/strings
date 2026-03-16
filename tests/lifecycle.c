@@ -2,7 +2,7 @@
 #include "prettyp.h"
 
 int main() {
-  string s = str_new("selam");
+  String s = str_new("selam");
   print_str(&s);
 
   if (!str_shrink_to_fit(&s)) printf("oh\n");
