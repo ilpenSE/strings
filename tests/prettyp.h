@@ -34,18 +34,17 @@
     printf("==================\n");             \
   } while(0)
 
-void print_vector(Vector* v) {
-  size_t len = v->len;
-  pprint("Vector items = [");
+void print_sv_vector(Vector(StringView)* v) {
+  size_t len = vec_len(v);
+  printf("{items: [");
   if (v->items) {
-    for (size_t i = 0; i < len; i++) {
-      StringView sv = vec_get_as(v, i, StringView);
-      pprint("\"" sv_fmt "\"%s", sv_arg(&sv), (i == len - 1 ? "" : ", "));
+    vec_foreach(v, it) {
+      bool is_last = sv_equals(it, &vec_last(v));
+      printf("\"" sv_fmt "\"%s", sv_arg(it), (is_last ? "" : ", "));
     }
   }
-  pprint("]");
-  pprint("Vector capacity: %zu", v->cap);
-  pprint("Vector length: %zu", v->len);
+  printf("], ");
+  printf("length: %zu}\n", len);
 }
 
 #endif // PRETTY_PRINT_H

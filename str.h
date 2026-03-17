@@ -25,6 +25,8 @@ typedef struct {
   size_t len; // does not include \0
 } StringView;
 
+DECL_VECTOR(StringView, StringView);
+
 #ifndef uchar_t
 typedef unsigned char uchar_t;
 #endif
@@ -130,13 +132,23 @@ STRDEF bool str_cat_str(String* dest, const String* src);
 STRDEF char* str_to_cstr(const String* s);
 
 /*
+  Wrapper for cstr_equals
+*/
+STRDEF bool str_equals(const String* s, const String* other);
+
+/*
+  Wrapper for cstr_equals
+*/
+STRDEF bool sv_equals(const StringView* s, const StringView* other);
+
+/*
   Check if 2 string are equal
-  Firstly checks lengths and pointers
-  then checks strings char-by-char
+  Make sure that buf1 and buf2's length same and n
+  Checks strings char-by-char
   Not really char-by-char, first goes with 8 bytes of chunks
   at the same time then goes char-by-char
 */
-STRDEF bool str_equals(const String* s, const String* other);
+STRDEF bool cstr_equals(const char* buf1, const char* buf2, size_t n);
 
 /*
   Free the String
@@ -220,7 +232,7 @@ STRDEF void str_capitalize(String* s);
   Splits the String by char buffer delim
   Uses strtok, writes to String array from parameters
 */
-STRDEF Vector str_split(String* s, const char delim);
+STRDEF Vector(StringView) str_split(String* s, const char delim);
 
 #ifdef STR_IMPLEMENTATION
 
@@ -353,12 +365,21 @@ bool str_cat_str(String* s, const String* c) {
   return str_catn(s, c->data, c->len);
 }
 
+bool sv_equals(const StringView* sv, const StringView* other) {
+  if (sv == other) return true;
+  if (sv->len != other->len) return false;
+  return cstr_equals(sv->data, other->data, sv->len);
+}
+
 bool str_equals(const String* s, const String* other) {
-  if (s->len != other->len) return false;
   if (s == other) return true;
-  size_t n = s->len;
-  const char* p = s->data;
-  const char* q = other->data;
+  if (s->len != other->len) return false;
+  return cstr_equals(s->data, other->data, s->len);
+}
+
+bool cstr_equals(const char* buf1, const char* buf2, size_t n) {
+  const char* p = buf1;
+  const char* q = buf2;
 
   // Alignment shit
   size_t prefix = (size_t)(-(word_t)p & WORD_MASK);
@@ -511,16 +532,15 @@ bool str_isalphanum(const String* s) {
   return true;
 }
 
-Vector str_split(String* s, const char delim) {
-  Vector vec = {0};
-  if (!vec_init(&vec, sizeof(StringView))) return vec;
+Vector(StringView) str_split(String* s, const char delim) {
+  Vector(StringView) vec = {0};
 
   size_t start = 0;
   size_t i = 0;
   while (i <= s->len) {
     if (i == s->len || s->data[i] == delim) {
       StringView sv = sv_from_str(s, start, i);
-      vec_push(&vec, &sv);
+      vec_push(&vec, sv);
       start = i + 1;
     }
     i++;
